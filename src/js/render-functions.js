@@ -42,5 +42,15 @@ function hideLoader() {
   loader.style.display = 'none';
 }
 
+function showLoadMoreButton() {
+  const loadMoreBtn = document.querySelector(".load-more-btn");
+  loadMoreBtn.classList.remove("visually-hidden");
+};
+
+function hideLoadMoreButton() {
+  const loadMoreBtn = document.querySelector(".load-more-btn");
+  loadMoreBtn.classList.add("visually-hidden");
+};
+
 export default renderPhoto;
-export { clearGallery, showLoader, hideLoader, simplelightbox, refreshSlb};
+export { clearGallery, showLoader, hideLoader, simplelightbox, refreshSlb, showLoadMoreButton, hideLoadMoreButton};

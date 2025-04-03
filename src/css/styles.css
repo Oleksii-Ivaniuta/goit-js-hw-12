@@ -45,6 +45,7 @@ body {
   flex-wrap: wrap;
   gap: 24px;
   max-width: 1128px;
+  margin-bottom: 32px;
 }
 
 .image-link {
@@ -161,4 +162,23 @@ input:focus {
   background: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
   border-radius: 0 0 8px 8px;
+}
+
+.load-more-btn {
+  width: 125px;
+  margin-bottom: 32px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }
