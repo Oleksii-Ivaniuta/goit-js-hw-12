@@ -26,8 +26,8 @@ let query = null;
 form.addEventListener('submit', makeGallery);
 function makeGallery(event) {
   event.preventDefault();
-    clearGallery(gallery);
-    hideLoadMoreButton();
+  clearGallery(gallery);
+  hideLoadMoreButton();
   showLoader();
   query = input.value;
   page = 1;
@@ -52,6 +52,12 @@ function makeGallery(event) {
         return;
       } else {
         renderPhoto(gallery, response.data.hits);
+        const galleryItem = document.querySelector('.gallery-item');
+        let rect = galleryItem.getBoundingClientRect();
+        window.scrollBy({
+          top: rect.height * 2,
+          behavior: 'smooth',
+        });
         totalPages = Math.ceil(response.data.totalHits / 15);
         if (page < totalPages) {
           showLoadMoreButton();
@@ -82,8 +88,14 @@ loadMoreBtn.addEventListener('click', event => {
   showLoader();
   page += 1;
   fetchData(query, page)
-      .then(response => {
-        renderPhoto(gallery, response.data.hits);
+    .then(response => {
+      renderPhoto(gallery, response.data.hits);
+      const galleryItem = document.querySelector('.gallery-item');
+      let rect = galleryItem.getBoundingClientRect();
+      window.scrollBy({
+        top: rect.height * 2,
+        behavior: 'smooth',
+      });
       if (page < totalPages) {
         showLoadMoreButton();
       } else {
@@ -92,7 +104,6 @@ loadMoreBtn.addEventListener('click', event => {
           message: `We're sorry, but you've reached the end of search results.`,
         });
       }
-      
     })
     .catch(() => {
       iziToast.error({
