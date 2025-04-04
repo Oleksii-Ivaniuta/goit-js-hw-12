@@ -24,7 +24,7 @@ let totalPages = null;
 let query = null;
 
 form.addEventListener('submit', makeGallery);
-function makeGallery(event) {
+async function makeGallery(event) {
   event.preventDefault();
   clearGallery(gallery);
   hideLoadMoreButton();
@@ -39,56 +39,54 @@ function makeGallery(event) {
     });
     return;
   }
-  fetchData(query, page)
-    .then(response => {
-      // перевірка успішного запиту на порожній масив зображень
-      if (response.data.hits.length === 0) {
-        iziToast.error({
-          message:
-            'Sorry, there are no images matching your search query. Please try again!',
-          position: 'topRight',
-        });
-        hideLoadMoreButton();
-        return;
-      } else {
-        renderPhoto(gallery, response.data.hits);
-        const galleryItem = document.querySelector('.gallery-item');
-        let rect = galleryItem.getBoundingClientRect();
-        window.scrollBy({
-          top: rect.height * 2,
-          behavior: 'smooth',
-        });
-        totalPages = Math.ceil(response.data.totalHits / 15);
-        if (page < totalPages) {
-          showLoadMoreButton();
-        } else {
-          iziToast.info({
-            position: 'bottomCenter',
-            message: `We're sorry, but you've reached the end of search results.`,
-          });
-        }
-      }
-    })
-    .catch(() => {
+  try {
+    const response = await fetchData(query, page);
+    if (response.data.hits.length === 0) {
       iziToast.error({
-        message: 'Bad request',
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
+      hideLoadMoreButton();
       return;
-    })
-    .finally(() => {
-      hideLoader();
-      input.value = '';
+    } else {
+      renderPhoto(gallery, response.data.hits);
+      const galleryItem = document.querySelector('.gallery-item');
+      let rect = galleryItem.getBoundingClientRect();
+      window.scrollBy({
+        top: rect.height * 2,
+        behavior: 'smooth',
+      });
+      totalPages = Math.ceil(response.data.totalHits / 15);
+      if (page < totalPages) {
+        showLoadMoreButton();
+      } else {
+        iziToast.info({
+          position: 'bottomCenter',
+          message: `We're sorry, but you've reached the end of search results.`,
+        });
+      }
+    }
+  }
+  catch (error) {
+    iziToast.error({
+      message: 'Bad request',
+      position: 'topRight',
     });
+    return;
+  }
+  hideLoader();
+  input.value = '';
 }
 
-loadMoreBtn.addEventListener('click', event => {
+loadMoreBtn.addEventListener('click', LoadMore)
+  async function  LoadMore(event) {
   event.preventDefault();
   hideLoadMoreButton();
   showLoader();
   page += 1;
-  fetchData(query, page)
-    .then(response => {
+    try { 
+      const response = await fetchData(query, page);
       renderPhoto(gallery, response.data.hits);
       const galleryItem = document.querySelector('.gallery-item');
       let rect = galleryItem.getBoundingClientRect();
@@ -104,15 +102,13 @@ loadMoreBtn.addEventListener('click', event => {
           message: `We're sorry, but you've reached the end of search results.`,
         });
       }
-    })
-    .catch(() => {
-      iziToast.error({
+    }
+    catch (error) {
+ iziToast.error({
         message: 'Bad request',
         position: 'topRight',
       });
       return;
-    })
-    .finally(() => {
+    }
       hideLoader();
-    });
-});
+};
