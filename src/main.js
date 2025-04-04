@@ -79,8 +79,8 @@ async function makeGallery(event) {
   input.value = '';
 }
 
-loadMoreBtn.addEventListener('click', LoadMore)
-  async function  LoadMore(event) {
+loadMoreBtn.addEventListener('click', loadMore)
+  async function  loadMore(event) {
   event.preventDefault();
   hideLoadMoreButton();
   showLoader();
