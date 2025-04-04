@@ -73,7 +73,6 @@ async function makeGallery(event) {
       message: 'Bad request',
       position: 'topRight',
     });
-    return;
   }
   hideLoader();
   input.value = '';
@@ -108,7 +107,6 @@ loadMoreBtn.addEventListener('click', loadMore)
         message: 'Bad request',
         position: 'topRight',
       });
-      return;
     }
       hideLoader();
 };
