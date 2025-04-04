@@ -47,7 +47,7 @@ async function makeGallery(event) {
           'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
-      hideLoadMoreButton();
+      hideLoader();
       return;
     } else {
       renderPhoto(gallery, response.data.hits);
